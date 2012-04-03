@@ -1,0 +1,47 @@
+<ivysettings>
+  <!-- Inherit the built-in resolver chain of Ivy: -->
+  <include url="${ivy.default.settings.dir}/ivysettings.xml" />
+  
+  <!--
+    Each project has its own private *resolution* cache for "thread-safety"
+    and to avoid "unknown resolver" errors.
+    For built-in repos (public (i.e. Ibiblio), local, etc.) the *repository*
+    cache will be the user-account default, but we use artifact-lock in the
+    hope that other projects do that too. For custom repos we use a separate
+    repository cache, "freemarker-devel-cache", so we won't cause
+    "unknown resolver" errors in projects that don't use our Ivy schema.
+  -->
+  <caches resolutionCacheDir="${ivy.project.dir}/.ivy/update-deps-reso-cache" lockStrategy="artifact-lock">
+    <cache name="freemarker-devel-cache" basedir="${user.home}/.ivy2/freemarker-devel-cache" />
+  </caches>
+  
+  <resolvers>
+    <url name="zeroturnaround" m2compatible="true" cache="freemarker-devel-cache">
+      <artifact pattern="http://repos.zeroturnaround.com/nexus/content/groups/zt-public/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+    </url>
+    <url name="freemarker-devel-webserver" cache="freemarker-devel-cache">
+      <ivy pattern="http://freemarker.org/repos/ivy/[organisation]/[module]/ivy-[revision].xml" />
+      <artifact pattern="http://freemarker.org/repos/ivy/[organisation]/[module]/[artifact]-[revision].[ext]" />
+    </url>
+    <url name="aQute" cache="freemarker-devel-cache" m2compatible="true">
+      <artifact pattern=" http://www.aQute.biz/repo/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+    </url>
+  </resolvers>
+  <modules>
+    <!-- Our modules whose releases are not on Ibiblio: -->
+    <module organisation="org.visigoths" resolver="freemarker-devel-webserver" />
+    
+    <!-- Our integration builds of modules whose releases are on Ibiblo *only*: -->
+    <module organisation="org.freemarker" revision="(.*branch-head.*)|(latest\.(integration|nightly|dev))" resolver="freemarker-devel-webserver" />
+
+    <!-- Modules that can't be found or not well maintained in public repositries: -->
+    <module organisation="com.thaiopensource" name="jing" resolver="freemarker-devel-webserver" />
+    <module organisation="javax.servlet.jsp" name="jsp-api" revision="1.2" resolver="freemarker-devel-webserver" />
+    <module organisation="javax.script" name="script-api" resolver="freemarker-devel-webserver" />
+    
+    <!-- Modules on public repositories that are not in the Ivy built-in chain: -->
+    <module organisation="org.zeroturnaround" resolver="zeroturnaround" />
+    <module organisation="biz.aQute" resolver="aQute" />
+  </modules>
+</ivysettings>
+
