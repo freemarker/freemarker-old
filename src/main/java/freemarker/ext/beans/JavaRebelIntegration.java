@@ -45,5 +45,10 @@ class JavaRebelIntegration
                 wrapper.removeIntrospectionInfo(klass);
             }
         }
+
+        public int priority() {
+            return ClassEventListener.PRIORITY_DEFAULT;
+        }
+
     }
 }
