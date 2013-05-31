@@ -90,6 +90,10 @@ implements
                 value = new DebugConfigurationModel((Configuration)key);
             }
         }
+        if(value != null)
+        {
+            storage.put(key, value);
+        }
         return value;
     }
 

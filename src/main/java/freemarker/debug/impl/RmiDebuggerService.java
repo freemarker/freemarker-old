@@ -55,8 +55,10 @@ package freemarker.debug.impl;
 import java.io.Serializable;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
+import java.rmi.NoSuchObjectException;
 import java.rmi.RemoteException;
 import java.rmi.server.RemoteObject;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -89,11 +91,16 @@ extends
     private final Map listeners = new HashMap();
     private final ReferenceQueue refQueue = new ReferenceQueue();
      
+    private final RmiDebuggerImpl debugger;
+    private DebuggerServer server;
+
     RmiDebuggerService()
     {
         try
         {
-            new DebuggerServer((Serializable)RemoteObject.toStub(new RmiDebuggerImpl(this))).start();
+            debugger = new RmiDebuggerImpl(this);
+            server = new DebuggerServer((Serializable)RemoteObject.toStub(debugger));
+            server.start();
         }
         catch(RemoteException e)
         {
@@ -264,14 +271,36 @@ extends
             return null;
         }
         // Find the narrowest match
+        List childMatches = new ArrayList();
         for(Enumeration children = te.children(); children.hasMoreElements();)
         {
             TemplateElement child = (TemplateElement)children.nextElement();
             TemplateElement childmatch = findTemplateElement(child, line);
             if(childmatch != null)
             {
-                return childmatch;
+                childMatches.add(childmatch);
             }
+        }
+        //find a match that exactly matches the begin/end line
+        TemplateElement bestMatch = null;
+        for(int i = 0; i < childMatches.size(); i++)
+        {
+            TemplateElement e = (TemplateElement) childMatches.get(i);
+
+            if( bestMatch == null )
+            {
+                bestMatch = e;
+            }
+
+            if( e.getBeginLine() == e.getEndLine() && e.getBeginLine() == line)
+            {
+                bestMatch = e;
+                break;
+            }
+        }
+        if( bestMatch != null)
+        {
+           return bestMatch;
         }
         // If no child provides narrower match, return this
         return te;
@@ -465,6 +494,18 @@ extends
                     templateDebugInfos.remove(ref.templateName);
                 }
             }
+        }
+    }
+
+    void shutdownSpi()
+    {
+        server.stop();
+        try
+        {
+            UnicastRemoteObject.unexportObject(this.debugger, true);
+        }
+        catch(NoSuchObjectException e)
+        {
         }
     }
 }

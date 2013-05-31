@@ -107,6 +107,13 @@ public abstract class DebuggerService
     throws
         RemoteException;
 
+    abstract void shutdownSpi();
+
+    public static void shutdown()
+    {
+        instance.shutdownSpi();
+    }
+
     private static class NoOpDebuggerService extends DebuggerService
     {
         List getBreakpointsSpi(String templateName)
@@ -120,6 +127,10 @@ public abstract class DebuggerService
         }
         
         void registerTemplateSpi(Template template)
+        {
+        }
+
+        void shutdownSpi()
         {
         }
     }
