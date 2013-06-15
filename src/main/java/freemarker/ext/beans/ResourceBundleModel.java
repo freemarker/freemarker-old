@@ -165,10 +165,11 @@ public class ResourceBundleModel
         String key = unwrap((TemplateModel)it.next()).toString();
         try
         {
-            if(!it.hasNext())
-            {
-                return wrap(((ResourceBundle)object).getObject(key));
-            }
+            // Always use MessageFormat to keep single quote escaping consistent
+            //if(!it.hasNext())
+            //{
+            //    return wrap(((ResourceBundle)object).getObject(key));
+            //}
     
             // Copy remaining arguments into an Object[]
             int args = arguments.size() - 1;
