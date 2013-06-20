@@ -62,16 +62,19 @@ import freemarker.template.TemplateException;
  */
 public class DebugBreak extends TemplateElement
 {
-    public DebugBreak(TemplateElement nestedBlock)
+    private int lineNumber;
+
+    public DebugBreak(TemplateElement nestedBlock, int lineNumber)
     {
         this.nestedBlock = nestedBlock;
         nestedBlock.parent = this;
+        this.lineNumber = lineNumber;
         copyLocationFrom(nestedBlock);
     }
     
     protected void accept(Environment env) throws TemplateException, IOException
     {
-        if(!DebuggerService.suspendEnvironment(env, this.getTemplate().getName(), nestedBlock.getBeginLine()))
+        if(!DebuggerService.suspendEnvironment(env, this.getTemplate().getName(), this.lineNumber))
         {
             nestedBlock.accept(env);
         }

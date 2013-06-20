@@ -27,9 +27,12 @@ implements
         this.service = service;
     }
 
-    public void addBreakpoint(Breakpoint breakpoint)
+    public void addBreakpoint(Breakpoint breakpoint) throws RemoteException
     {
-        service.addBreakpoint(breakpoint);
+        if(!service.addBreakpoint(breakpoint))
+        {
+            throw new RemoteException("unable to add breakpoint");
+        }
     }
 
     public Object addDebuggerListener(DebuggerListener listener)
