@@ -89,6 +89,9 @@ import freemarker.core._CoreAPI;
 import freemarker.core._DelayedJQuote;
 import freemarker.core._MiscTemplateException;
 import freemarker.debug.DebuggerService;
+import freemarker.debug.DebuggerServiceProvider;
+import freemarker.debug.DebuggerServiceRegistry;
+import freemarker.debug.JDKServiceLoader;
 import freemarker.template.utility.CaptureOutput;
 import freemarker.template.utility.ClassUtil;
 import freemarker.template.utility.HtmlEscape;
@@ -1252,10 +1255,14 @@ public class Configuration extends Configurable implements Cloneable {
 	}
 	
 	public DebuggerService getDebuggerService() {
+	    if (debuggerService == null) {
+	        debuggerService = DebuggerServiceRegistry.getService();
+	    }
         return debuggerService;
     }
 	
 	public void setDebuggerService(DebuggerService debuggerService) {
         this.debuggerService = debuggerService;
     }
+	
 }
