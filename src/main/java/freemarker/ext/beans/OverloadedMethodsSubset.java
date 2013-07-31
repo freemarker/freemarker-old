@@ -58,6 +58,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import freemarker.core._ConcurrentMapFactory;
 import freemarker.template.TemplateModelException;
 
 /**
@@ -70,7 +71,8 @@ abstract class OverloadedMethodsSubset {
 
     private Class[/*number of args*/][/*arg index*/] unwrappingArgTypesByArgCount;
     // TODO: make it not concurrent
-    private final Map selectorCache = new HashMap();
+    private final Map selectorCache = _ConcurrentMapFactory.newMaybeConcurrentHashMap();
+    private final boolean isSelectorCacheConcurrentMap = _ConcurrentMapFactory.isConcurrent(selectorCache);
     private final List/*<Constructor|Method>*/ members = new LinkedList();
     private final Map/*<Constructor|Method, Class[]>*/ signatures = new HashMap();
     
@@ -120,6 +122,11 @@ abstract class OverloadedMethodsSubset {
     Object getMemberForArgs(Object[] args, boolean varArg) {
         ClassString argTypes = new ClassString(args);
         Object objMember;
+        if (isSelectorCacheConcurrentMap) {
+            objMember = selectorCache.get(argTypes);
+            if (objMember != null) return objMember;
+        }
+
         synchronized(selectorCache) {
             objMember = selectorCache.get(argTypes);
             if(objMember == null) {
