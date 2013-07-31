@@ -88,6 +88,10 @@ import freemarker.core._ConcurrentMapFactory;
 import freemarker.core._CoreAPI;
 import freemarker.core._DelayedJQuote;
 import freemarker.core._MiscTemplateException;
+import freemarker.debug.DebuggerService;
+import freemarker.debug.DebuggerServiceProvider;
+import freemarker.debug.DebuggerServiceRegistry;
+import freemarker.debug.JDKServiceLoader;
 import freemarker.template.utility.CaptureOutput;
 import freemarker.template.utility.ClassUtil;
 import freemarker.template.utility.HtmlEscape;
@@ -192,6 +196,8 @@ public class Configuration extends Configurable implements Cloneable {
     private ArrayList autoImports = new ArrayList(), autoIncludes = new ArrayList(); 
     private Map autoImportNsToTmpMap = new HashMap();   // TODO No need for this, instead use List<NamespaceToTemplate> below.
 
+    private DebuggerService debuggerService;
+    
     public Configuration() {
         cache = new TemplateCache();
         cache.setConfiguration(this);
@@ -1247,4 +1253,16 @@ public class Configuration extends Configurable implements Cloneable {
 		}
 		return s;
 	}
+	
+	public DebuggerService getDebuggerService() {
+	    if (debuggerService == null) {
+	        debuggerService = DebuggerServiceRegistry.getService();
+	    }
+        return debuggerService;
+    }
+	
+	public void setDebuggerService(DebuggerService debuggerService) {
+        this.debuggerService = debuggerService;
+    }
+	
 }
