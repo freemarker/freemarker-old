@@ -84,6 +84,13 @@ class JspTagModelBase
                         aarg[0] = BeansWrapper.coerceBigDecimal(
                                 (BigDecimal)arg, m.getParameterTypes()[0]);
                     }
+                    Class[] paramTypes = m.getParameterTypes();
+                    if (paramTypes.length > 0 && aarg[0] instanceof String) {
+                        String strArg = (String) aarg[0];
+                        if (paramTypes[0].isAssignableFrom(Boolean.class) || boolean.class == paramTypes[0]) {
+                            aarg[0] = Boolean.valueOf(strArg);
+                        }
+                    }
                     m.invoke(tag, aarg);
                 }
             }
