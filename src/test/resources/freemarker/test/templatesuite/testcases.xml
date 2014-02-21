@@ -135,6 +135,7 @@
       <config object_wrapper="freemarker.ext.beans.BeansWrapper"/>
    </testcase>   
    <testcase name="hashconcat"/>
+   <testcase name="hash-null-value"/>
    <testcase name="new-defaultresolver" />
    <testcase name="new-unrestricted">
       <config new_builtin_class_resolver="unrestricted"/>

@@ -200,7 +200,7 @@ implements TemplateHashModelEx, Serializable {
         // SourceForge tracker.
         final Object putKey;
         if (result == null) {
-            if(key.length() == 1) {
+            if(!map.containsKey(key) && key.length() == 1) {
                 // just check for Character key if this is a single-character string
                 Character charKey = new Character(key.charAt(0));
                 result = map.get(charKey);

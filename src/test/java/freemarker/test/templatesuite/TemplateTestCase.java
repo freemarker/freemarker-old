@@ -62,12 +62,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -77,6 +79,7 @@ import org.xml.sax.InputSource;
 
 import freemarker.ext.beans.BeansWrapper;
 import freemarker.ext.beans.BooleanModel;
+import freemarker.ext.beans.MapModel;
 import freemarker.ext.beans.ResourceBundleModel;
 import freemarker.ext.dom.NodeModel;
 import freemarker.template.Configuration;
@@ -415,10 +418,16 @@ public class TemplateTestCase extends FileTestCase {
             dataModel.put("beanFalse", new BeansWrapper().wrap(Boolean.FALSE));
         }
         
-      else if (testName.startsWith("overloaded-methods-2-")) {
-          dataModel.put("obj", new OverloadedMethods2());
-          dataModel.put("dow", Boolean.valueOf(conf.getObjectWrapper() instanceof DefaultObjectWrapper));
-      }
+        else if (testName.startsWith("overloaded-methods-2-")) {
+            dataModel.put("obj", new OverloadedMethods2());
+            dataModel.put("dow", Boolean.valueOf(conf.getObjectWrapper() instanceof DefaultObjectWrapper));
+        }
+        else if (testName.equals("hash-null-value")) {
+            Map<String, String> map = new LinkedHashMap<String, String>();
+            map.put("1", null);
+            map.put("2", "foo");
+            dataModel.put("map", map);
+        }
     }
     
     public void runTest() {
