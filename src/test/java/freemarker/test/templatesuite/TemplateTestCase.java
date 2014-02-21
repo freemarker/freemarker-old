@@ -69,7 +69,6 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -79,7 +78,6 @@ import org.xml.sax.InputSource;
 
 import freemarker.ext.beans.BeansWrapper;
 import freemarker.ext.beans.BooleanModel;
-import freemarker.ext.beans.MapModel;
 import freemarker.ext.beans.ResourceBundleModel;
 import freemarker.ext.dom.NodeModel;
 import freemarker.template.Configuration;
