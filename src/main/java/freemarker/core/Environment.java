@@ -1103,9 +1103,9 @@ public final class Environment extends Configurable {
                     }
                 }
 
-				if (dateType == TemplateDateModel.DATETIME || dateType == TemplateDateModel.TIME) {
-					format.setTimeZone(timeZone);
-				}
+                if (dateType == TemplateDateModel.DATETIME || dateType == TemplateDateModel.TIME) {
+                    format.setTimeZone(timeZone);
+                }
                 localizedDateFormats.put(fk, format);
             }
         }
