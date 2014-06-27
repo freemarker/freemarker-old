@@ -1063,7 +1063,10 @@ public final class Environment extends Configurable {
                                 "Can't parse ", new _DelayedJQuote(pattern), " to a date format, because:\n", e });
                     }
                 }
-                format.setTimeZone(timeZone);
+
+                if (dateType == TemplateDateModel.DATETIME || dateType == TemplateDateModel.TIME) {
+                    format.setTimeZone(timeZone);
+                }
                 localizedDateFormats.put(fk, format);
             }
         }
