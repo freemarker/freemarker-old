@@ -574,7 +574,7 @@ public class TemplateCache
         }
     }
 
-    private Object findTemplateSource(String name, Locale locale)
+    protected Object findTemplateSource(String name, Locale locale)
     throws
         IOException
     {
@@ -607,7 +607,7 @@ public class TemplateCache
         }
     }
 
-    private Object acquireTemplateSource(String path) throws IOException
+    protected Object acquireTemplateSource(String path) throws IOException
     {
         int asterisk = path.indexOf(ASTERISK);
         // Shortcut in case there is no acquisition

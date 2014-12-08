@@ -37,8 +37,6 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import javax.servlet.ServletContext;
-
 import freemarker.cache.CacheStorage;
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.cache.FileTemplateLoader;
@@ -382,13 +380,13 @@ public class Configuration extends Configurable implements Cloneable {
         loadBuiltInSharedVariables();
     }
 
-    private void createTemplateCache() {
+    protected void createTemplateCache() {
         cache = new TemplateCache(getDefaultTemplateLoader(), this);
         cache.clear(); // for fully BC behavior
         cache.setDelay(5000);
     }
     
-    private void recreateTemplateCacheWith(TemplateLoader loader, CacheStorage storage) {
+    protected void recreateTemplateCacheWith(TemplateLoader loader, CacheStorage storage) {
         TemplateCache oldCache = cache;
         cache = new TemplateCache(loader, storage, this);
         cache.clear(); // for fully BC behavior
