@@ -85,7 +85,18 @@ public class TemplateException extends Exception {
      * @param description the description of the error that occurred
      */
     public TemplateException(String description, Environment env) {
-        this(description, null, env);
+        this(description, env, true);
+    }
+
+    /**
+     * Constructs a TemplateException with the given detail message,
+     * but no underlying cause exception.
+     *
+     * @param description the description of the error that occurred
+     * @param useCurrentEnvironmentIfEnvIsNull use Envirorment.getCurrentEnvironment() if env is null. 
+     */
+    public TemplateException(String description, Environment env, boolean useCurrentEnvironmentIfEnvIsNull) {
+        this(description, null, env, null, null, useCurrentEnvironmentIfEnvIsNull);
     }
 
     /**
@@ -147,12 +158,23 @@ public class TemplateException extends Exception {
             String renderedDescription,
             Throwable cause,            
             Environment env, Expression blamedExpression,
-            _ErrorDescriptionBuilder descriptionBuilder) {
+            _ErrorDescriptionBuilder descriptionBuilder
+            ) {
+        this(renderedDescription, cause, env, blamedExpression, descriptionBuilder, true);
+    }
+    
+    private TemplateException(
+            String renderedDescription,
+            Throwable cause,            
+            Environment env, Expression blamedExpression,
+            _ErrorDescriptionBuilder descriptionBuilder,
+            boolean useCurrentEnvironmentIfEnvIsNull
+            ) {
         // Note: Keep this constructor lightweight.
         
         super(cause);  // Message managed locally.
         
-        if (env == null) env = Environment.getCurrentEnvironment();
+        if (useCurrentEnvironmentIfEnvIsNull && env == null) env = Environment.getCurrentEnvironment();
         this.env = env;
         
         this.blamedExpression = blamedExpression;

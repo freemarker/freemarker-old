@@ -27,7 +27,7 @@ public class InvalidReferenceException extends TemplateException {
     static final InvalidReferenceException FAST_INSTANCE = new InvalidReferenceException(
             "Invalid reference. Details are unavilable, as this should have been handled by an FTL construct. "
             + "If it wasn't, that's problably a bug in FreeMarker.",
-            null);
+            null, false);
     
     private static final String[] TIP = new String[] {
         "If the failing expression is known to be legally refer to something that's sometimes null or missing, "
@@ -62,7 +62,7 @@ public class InvalidReferenceException extends TemplateException {
      * As such, try to avoid this constructor.
      */
     public InvalidReferenceException(Environment env) {
-        super("Invalid reference: The expression has evaluated to null or refers to something that doesn't exist.",
+        this("Invalid reference: The expression has evaluated to null or refers to something that doesn't exist.",
                 env);
     }
 
@@ -72,7 +72,16 @@ public class InvalidReferenceException extends TemplateException {
      * the FreeMarker core.
      */
     public InvalidReferenceException(String description, Environment env) {
-        super(description, env);
+        this(description, env, true);
+    }
+
+    /**
+     * Creates and invalid reference exception that contains no programmatically extractable information about the
+     * blamed expression. As such, try to avoid this constructor, unless need to raise this expression from outside
+     * the FreeMarker core. 
+     */
+    public InvalidReferenceException(String description, Environment env, boolean useCurrentEnvironmentIfEnvIsNull) {
+        super(description, env, useCurrentEnvironmentIfEnvIsNull);
     }
 
     /**
