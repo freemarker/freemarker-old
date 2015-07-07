@@ -22,6 +22,7 @@ import org.mozilla.javascript.Function;
 import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
+import org.mozilla.javascript._FreeMarkerNativeDateHelper;
 
 import freemarker.ext.beans.BeansWrapper;
 import freemarker.ext.util.ModelFactory;
@@ -62,6 +63,8 @@ TemplateBooleanModel, TemplateNumberModel
         if(retval instanceof Function) {
             return new RhinoFunctionModel((Function)retval, scriptable, wrapper);
         }
+        if (_FreeMarkerNativeDateHelper.instanceofNativeDate(retval))
+            return new RhinoDateModel(new java.util.Date(_FreeMarkerNativeDateHelper.nativeDateToMillisUTC(retval)));
         else {
             return wrapper.wrap(retval);
         }
