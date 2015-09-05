@@ -150,7 +150,7 @@ class FreeMarkerJspApplicationContext implements JspApplicationContext {
                 public ValueExpression setVariable(String name, 
                         ValueExpression value) {
                     ValueExpression prev = resolveVariable(name);
-                    pageCtx.setAttribute(name, value.getValue(
+                    pageCtx.setAttribute(name, value==null?null:value.getValue(
                             FreeMarkerELContext.this));
                     return prev;
                 }
